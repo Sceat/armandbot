@@ -1,5 +1,7 @@
 import Telegraf from 'telegraf'
 import express from 'express'
+import http from 'http'
+
 const expressApp = express()
 const port = process.env.PORT || 3000
 
@@ -71,4 +73,9 @@ bot.on('text', ctx => {
 			break
 	}
 })
+
+setInterval(function() {
+    http.get("https://armandbot.herokuapp.com/");
+}, 300000); /
+
 bot.startPolling()
