@@ -75,7 +75,7 @@ bot.on('text', ctx => {
 })
 
 setInterval(function() {
-	http.get('https://armandbot.herokuapp.com/')
+	http.get('http://armandbot.herokuapp.com/')
 }, 300000)
 
 bot.startPolling()
