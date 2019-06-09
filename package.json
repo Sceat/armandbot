@@ -5,7 +5,10 @@
   "main": "src/index.js",
   "author": "Sceat",
   "scripts": {
-    "start": "babel-node src/index.js",
+    "prepack": "npm run build",
+    "build": "babel src -d lib",
+    "start": "node lib/index.js",
+    "dev": "nodemon --exec babel-node src/index.js",
     "postversion": "git push && git push --tags"
   },
   "dependencies": {
@@ -36,6 +39,7 @@
     "babel-plugin-hash-resolve": "^1.0.2",
     "babel-plugin-implicit-function": "^0.1.1",
     "babel-plugin-wildcard": "^5.0.0",
+    "nodemon": "^1.19.1",
     "tap-spec": "^5.0.0"
   }
 }

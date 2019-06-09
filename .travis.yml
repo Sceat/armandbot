@@ -1,0 +1,13 @@
+language: node_js
+node_js:
+  - node
+script:
+  - npm run build
+deploy:
+  provider: heroku
+  api_key: '$HEROKU_TOKEN'
+  app: armandbot
+  script: echo "Deploying to heroku ..."
+  on:
+    tags: true
+    branch: master
