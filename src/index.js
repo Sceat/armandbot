@@ -12,10 +12,6 @@ expressApp.listen(port, () => {
 })
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
-bot.hears(/./, (ctx) => ctx.reply('Hello'))
-bot.startPolling()
-
-const bot = new Telegraf(process.env.BOT_TOKEN)
 const rand = () => Math.random() >= 0.5
 const mock = text =>
 	[...text].map(l => (rand() ? l.toLowerCase() : l.toUpperCase())).reduce((a, b) => `${a}${b}`, '')
