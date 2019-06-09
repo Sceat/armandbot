@@ -52,7 +52,7 @@ const gpalu = [
 ]
 
 const randDumb = () => dumbies[Math.floor(Math.random() * dumbies.length)]
-const randGpalu  ()=> gpalu[Math.floor(Math.random() * gpalu.length)]
+const randGpalu = () => gpalu[Math.floor(Math.random() * gpalu.length)]
 
 bot.on('text', ctx => {
 	const msg = ctx.update?.message
