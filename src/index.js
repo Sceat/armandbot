@@ -1,7 +1,11 @@
 import Telegraf from 'telegraf'
 import express from 'express'
 import http from 'http'
-import cmc from './cmc'
+import cmc, { btcUp } from './cmc'
+import Giphy from 'giphy-random'
+
+const VERSION = require('../package.json').version
+const { GIF_KEY = 'dc6zaTOxFJmzC ' } = process.env
 
 // DISCLAIMER
 // THE CODE OF THIS BOT IS ABSOLUTLY DOG SHIT
@@ -242,8 +246,54 @@ const poll = () => {
 	})
 }
 
-poll()
-setInterval(() => poll(), 1000 * 60 * 6)
+const quotesBtc = [
+	`Si un homme n'embrasse pas une femme au premier rendez-vous, c'est un gentleman. Au second, c'est qu'il est gay`,
+	`Heureux de vivre comme une cigale`,
+	`J'aimerais être gay juste pour faire chier les homophobest`,
+	`Être gay n'est pas une invention occidentale. C'est une réalité humaine`,
+	`- Êtes vous homosexuel, répondez à la question ! Êtes vous un homo ? Êtes vous une pédale, une tapette, une folle, une chochotte un empaffé, un de la jaquette, une tantouse ? ÊTES VOUS GAY `,
+	`Cela ne devrait jamais être un crime d'être gay`,
+	`Il est gay comme un poisson dans l'eau`,
+	`Où est le cyclope gay ?`,
+	`Eh bien voila, ton fils est gay`,
+	`Être gay n'est pas quelque chose que l'on décide, mais être homophobe oui`,
+	`C'est vraiment un drôle de gay mon poto Michou. Il écopa du coup du sobriquet de broute-de-train`,
+	`Tout gay est un homophobe qui s'ignore !`
+]
+
+const randGay = () => quotesBtc[Math.floor(Math.random() * quotesBtc.length)]
+
+const pollBtc = () => {
+	btcUp().then(percent => {
+		if (percent > 5)
+			bot.telegram.sendMessage(
+				TG_ROOM,
+				`${randGay()}
+
+*le BTC est up ${percent.toFixed(2)}% aujourd'hui* 🍆`,
+				{
+					parse_mode: 'Markdown',
+					disable_web_page_preview: true
+				}
+			)
+		bot.telegram.sendVideo(TG_ROOM, 'https://media.giphy.com/media/8LWOXKCJxAOic/giphy.gif')
+	})
+}
+
+const dancingGif = async () => Giphy(GIF_KEY, { tag: 'dancing' })
+const horrayGif = async () => Giphy(GIF_KEY, { tag: 'horray' })
+
+bot.telegram.sendMessage(
+	TG_ROOM,
+	`Oh Oh Oh ! *Je suis armand* le bot qui parle chinois.
+@sceat le bg vient de me deployer en version *${VERSION}* 🎉`,
+	{ parse_mode: 'Markdown' }
+)
+bot.telegram.sendVideo(TG_ROOM, 'https://media.giphy.com/media/GxZpLbwKRQo0M/giphy.gif')
+// horrayGif().then(({ data: { image_mp4_url } }) => bot.telegram.sendVideo(TG_ROOM, image_mp4_url))
+
+setInterval(() => poll(), 1000 * 60 * 10)
+setInterval(() => pollBtc(), 1000 * 60 * 60)
 
 setInterval(() => {
 	http.get('http://armandbot.herokuapp.com/')

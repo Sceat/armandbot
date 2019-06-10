@@ -20,6 +20,20 @@ const requestOptions = {
 	gzip: true
 }
 
+const requestBTC = {
+	method: 'GET',
+	uri: 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest',
+	qs: {
+		start: '1',
+		limit: 1,
+		convert: 'USD'
+	},
+	headers: { 'X-CMC_PRO_API_KEY': CMC_KEY },
+	json: true,
+	gzip: true
+}
+
+const fetchBTC = async () => rp(requestBTC)
 const fetchCryptos = async () => rp(requestOptions)
 const keepWinners = ({
 	quote: {
@@ -81,6 +95,16 @@ const taunt = [
 ]
 
 const randTaunt = () => taunt[Math.floor(Math.random() * taunt.length)]
+
+export const btcUp = async () => {
+	const { data } = await fetchBTC()
+	const {
+		quote: {
+			USD: { percent_change_24h }
+		}
+	} = data[0]
+	return percent_change_24h
+}
 
 export default async () => {
 	const { data } = await fetchCryptos()
