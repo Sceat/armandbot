@@ -25,7 +25,7 @@ const keepWinners = ({
 	quote: {
 		BTC: { percent_change_1h }
 	}
-}) => percent_change_1h >= 6
+}) => percent_change_1h >= 5
 const spread = ({
 	id,
 	symbol,
@@ -42,7 +42,7 @@ const spread = ({
 	}
 }
 
-const filterNew = map => ({ id }) => !map.has(id)
+const filterNew = ({ id }) => !last.has(id)
 const emoji = p => (p > 100 ? '🔞' : p > 50 ? '🛰' : p > 15 ? '🚀' : '🔥')
 const coinToMsg = ({ symbol, percent_change_1h }) =>
 	`*$${symbol}* _(+${percent_change_1h}%)_ ${emoji(percent_change_1h)}`
