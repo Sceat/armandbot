@@ -69,6 +69,6 @@ export default async () => {
 	cryptos.forEach(c => last.set(c.id, c))
 	const reducedCoins = cryptos.map(coinToMsg).reduce((a, b) => `${a}\n${b}`, '')
 	return `WOOOOSH ¯\\\_(ツ)_/¯ ! 🌚
-_(Top ${COIN_LIMIT} 24h winners)_
+_(Top ${COINS_LIMIT} 24h winners)_
 	${reducedCoins}`
 }
