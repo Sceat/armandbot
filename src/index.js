@@ -58,7 +58,7 @@ const randDumb = () => dumbies[Math.floor(Math.random() * dumbies.length)]
 const randGpalu = () => gpalu[Math.floor(Math.random() * gpalu.length)]
 
 bot.on('text', ctx => {
-	console.log(ctx.updateType)
+	console.log(ctx.chat)
 	const msg = ctx.update?.message
 	const text = msg?.text
 	const reply = msg?.reply_to_message?.text
@@ -76,16 +76,18 @@ bot.on('text', ctx => {
 	}
 })
 
+const { TG_ROOM = '-1001320428552' } = process.env // default to test room
+
 const poll = () => {
 	console.log('POLLING')
 	cmc().then(msg => {
 		console.log('POLLED')
-		if (msg) bot.telegram.sendMessage(process.env.TG_ROOM, msg, { parse_mode: 'Markdown' })
+		if (msg) bot.telegram.sendMessage(TG_ROOM, msg, { parse_mode: 'Markdown' })
 	})
 }
 
 poll()
-setInterval(() => poll(), 1000 * 60 * 5)
+setInterval(() => poll(), 1000 * 60 * 6)
 
 setInterval(() => {
 	http.get('http://armandbot.herokuapp.com/')

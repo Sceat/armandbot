@@ -44,10 +44,12 @@ const spread = ({
 	}
 }
 
+const sortWinner = ({ percent_change_1h: pa }, { percent_change_1h: pb }) => pa > pb
+
 const filterNew = ({ id }) => !last.has(id)
 const emoji = p => (p > 200 ? '⁉️🏆🏄' : p > 100 ? '🔞' : p > 50 ? '🛰' : p > 25 ? '🚀' : '🔥')
 const coinToMsg = ({ symbol, percent_change_1h, slug }) =>
-	`*[$${symbol}](https://coinmarketcap.com/currencies/${slug}/)* (+${percent_change_1h}%) ${emoji(
+	`[$${symbol}](https://coinmarketcap.com/currencies/${slug}/) (+${percent_change_1h}%) ${emoji(
 		percent_change_1h
 	)}`
 
@@ -59,6 +61,21 @@ setInterval(() => {
 		}
 }, DELETE_EVERY)
 
+const taunt = [
+	'WOOOOOSH ATTENTION BULL RUN',
+	'ALORS LES PD CA MANGE DES PATES ?',
+	'HUMMM LE DELICIEUX ARGENT',
+	'ET BAH... ET VOUS EN AVEZ AUCUN BANDE DE SINGE',
+	'ENCORE UN BATEAU QUI PART SANS VOUS',
+	'HAHAHA ALORS LES CLOCHARDS.. CA C DES VRAI COINS',
+	'MDR C PAS XBL QUI FERAIT CA...',
+	'BAH ALORS PAS TROP LE SEUM ??',
+	`LOL PERSONNE N'ETAIT PRET`,
+	'PUTIN MAIS VOUS SERVEZ VRAIMENT A RIEN...'
+]
+
+const randTaunt = () => taunt[Math.floor(Math.random() * taunt.length)]
+
 export default async () => {
 	const { data } = await fetchCryptos()
 	const cryptos = data
@@ -66,9 +83,9 @@ export default async () => {
 		.filter(filterNew)
 		.map(spread)
 	if (!cryptos.length) return
+	cryptos.sort(sortWinner)
 	cryptos.forEach(c => last.set(c.id, c))
 	const reducedCoins = cryptos.map(coinToMsg).reduce((a, b) => `${a}\n${b}`, '')
-	return `WOOOOSH ¯\\\_(ツ)_/¯ ! 🌚
-_(Top ${COINS_LIMIT} 24h winners)_
+	return `*${randTaunt()}* 🌚
 	${reducedCoins}`
 }
