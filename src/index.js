@@ -200,6 +200,12 @@ bot.hears('ris', ctx => {
 pRep([
 	/\bjbaise\b/,
 	/\bjken\b/,
+	/\bBAISE\b/,
+	/\bJBAISE\b/,
+	/\bBAIZ\b/,
+	/\bBAIZE\b/,
+	/\bjtebaiz\b/,
+	/\bJTEBAIZ\b/,
 	/\bjnik\b/,
 	/\bniker\b/,
 	/\bjbaiz\b/,
@@ -216,11 +222,11 @@ pRep(/\bfdp\b/)(3)(ctx =>
 	ctx.reply(randFdp(), { reply_to_message_id: ctx?.update?.message?.message_id })
 )
 
-pRep(/\bmargin\b/)(40)(ctx =>
+pRep(/\bmargin\b/)(10)(ctx =>
 	ctx.reply(randMargin(), { reply_to_message_id: ctx?.update?.message?.message_id })
 )
 
-pRep(/\bstp\b/)(20)(ctx =>
+pRep(/\bstp\b/)(4)(ctx =>
 	ctx.reply(randStp(), { reply_to_message_id: ctx?.update?.message?.message_id })
 )
 
