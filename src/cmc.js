@@ -23,15 +23,15 @@ const requestOptions = {
 const fetchCryptos = async () => rp(requestOptions)
 const keepWinners = ({
 	quote: {
-		BTC: { percent_change_1h }
+		BTC: { percent_change_24h }
 	}
-}) => percent_change_1h >= 10
+}) => percent_change_24h >= 15
 const spread = ({
 	id,
 	symbol,
 	slug,
 	quote: {
-		BTC: { percent_change_1h }
+		BTC: { percent_change_24h }
 	}
 }) => {
 	console.log('spreading', symbol)
@@ -39,18 +39,18 @@ const spread = ({
 		id,
 		symbol,
 		slug,
-		percent_change_1h: percent_change_1h.toFixed(2),
+		percent_change_24h: percent_change_24h.toFixed(2),
 		expire: Date.now() + EXPIRE
 	}
 }
 
-const sortWinner = ({ percent_change_1h: pa }, { percent_change_1h: pb }) => pa > pb
+const sortWinner = ({ percent_change_24h: pa }, { percent_change_24h: pb }) => +pb - +pa
 
 const filterNew = ({ id }) => !last.has(id)
 const emoji = p => (p > 200 ? '⁉️🏆🏄' : p > 100 ? '🔞' : p > 50 ? '🛰' : p > 25 ? '🚀' : '🔥')
-const coinToMsg = ({ symbol, percent_change_1h, slug }) =>
-	`[$${symbol}](https://coinmarketcap.com/currencies/${slug}/) (+${percent_change_1h}%) ${emoji(
-		percent_change_1h
+const coinToMsg = ({ symbol, percent_change_24h, slug }) =>
+	`[$${symbol}](https://coinmarketcap.com/currencies/${slug}/) (+${percent_change_24h}%) ${emoji(
+		percent_change_24h
 	)}`
 
 setInterval(() => {
