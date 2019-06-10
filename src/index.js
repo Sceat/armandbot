@@ -1,6 +1,7 @@
 import Telegraf from 'telegraf'
 import express from 'express'
 import http from 'http'
+import cmc from './cmc'
 
 const expressApp = express()
 const port = process.env.PORT || 3000
@@ -57,16 +58,17 @@ const randDumb = () => dumbies[Math.floor(Math.random() * dumbies.length)]
 const randGpalu = () => gpalu[Math.floor(Math.random() * gpalu.length)]
 
 bot.on('text', ctx => {
+	console.log(ctx.updateType)
 	const msg = ctx.update?.message
 	const text = msg?.text
 	const reply = msg?.reply_to_message?.text
 	switch (text) {
-		case '/pls mock':
+		case '/mock':
 			if (!reply) return
 			ctx.replyWithPhoto(randDumb())
 			ctx.reply(mock(reply))
 			break
-		case '/pls gpl':
+		case '/gpalu':
 			ctx.replyWithPhoto(randGpalu())
 			break
 		default:
@@ -74,7 +76,18 @@ bot.on('text', ctx => {
 	}
 })
 
-setInterval(function() {
+const poll = () => {
+	console.log('POLLING')
+	cmc().then(msg => {
+		console.log('POLLED')
+		if (msg) bot.telegram.sendMessage(process.env.TG_ROOM, msg, { parse_mode: 'Markdown' })
+	})
+}
+
+poll()
+setInterval(() => poll(), 1000 * 60 * 5)
+
+setInterval(() => {
 	http.get('http://armandbot.herokuapp.com/')
 }, 300000)
 
