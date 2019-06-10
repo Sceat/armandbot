@@ -265,7 +265,7 @@ const randGay = () => quotesBtc[Math.floor(Math.random() * quotesBtc.length)]
 
 const pollBtc = () => {
 	btcUp().then(percent => {
-		if (percent > 5)
+		if (percent > 8) {
 			bot.telegram.sendMessage(
 				TG_ROOM,
 				`${randGay()}
@@ -276,7 +276,8 @@ const pollBtc = () => {
 					disable_web_page_preview: true
 				}
 			)
-		bot.telegram.sendVideo(TG_ROOM, 'https://media.giphy.com/media/8LWOXKCJxAOic/giphy.gif')
+			bot.telegram.sendVideo(TG_ROOM, 'https://media.giphy.com/media/8LWOXKCJxAOic/giphy.gif')
+		}
 	})
 }
 
