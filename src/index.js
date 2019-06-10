@@ -201,7 +201,7 @@ bot.hears('ris', ctx => {
 	ctx.replyWithPhoto(randRis(), { reply_to_message_id: msg?.reply_to_message?.message_id })
 })
 
-pRep([
+const kenArrayRegex = [
 	/\bjbaise\b/,
 	/\bjken\b/,
 	/\bBAISE\b/,
@@ -220,17 +220,24 @@ pRep([
 	/\bken\b/,
 	/\bbaiz\b/,
 	/\bbaiser\b/
-])(3)(ctx => ctx.reply(randKen(), { reply_to_message_id: ctx?.update?.message?.message_id }))
+]
 
-pRep(/\bfdp\b/)(3)(ctx =>
+pRep(kenArrayRegex)(3)(ctx =>
+	ctx.reply(randKen(), { reply_to_message_id: ctx?.update?.message?.message_id })
+)
+
+const fdpRegex = /\bfdp\b/
+pRep(fdpRegex)(3)(ctx =>
 	ctx.reply(randFdp(), { reply_to_message_id: ctx?.update?.message?.message_id })
 )
 
-pRep(/\bmargin\b/)(10)(ctx =>
+const marginRegex = /\bmargin\b/
+pRep(marginRegex)(3)(ctx =>
 	ctx.reply(randMargin(), { reply_to_message_id: ctx?.update?.message?.message_id })
 )
 
-pRep(/\bstp\b/)(4)(ctx =>
+const stpRegex = /\bstp\b/
+pRep(stpRegex)(4)(ctx =>
 	ctx.reply(randStp(), { reply_to_message_id: ctx?.update?.message?.message_id })
 )
 
