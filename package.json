@@ -1,6 +1,6 @@
 {
   "name": "armand",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "tg bot",
   "main": "src/index.js",
   "author": "Sceat",
