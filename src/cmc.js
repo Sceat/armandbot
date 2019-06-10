@@ -3,7 +3,7 @@ import rp from 'request-promise'
 const { CMC_KEY } = process.env
 const last = new Map()
 
-const COINS_LIMIT = 200
+const COINS_LIMIT = 500
 const EXPIRE = 1000 * 60 * 59
 const DELETE_EVERY = 1000 * 60 * 20
 
@@ -25,7 +25,7 @@ const keepWinners = ({
 	quote: {
 		BTC: { percent_change_1h }
 	}
-}) => percent_change_1h >= 5
+}) => percent_change_1h >= 6
 const spread = ({
 	id,
 	symbol,
