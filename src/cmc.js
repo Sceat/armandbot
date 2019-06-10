@@ -3,8 +3,8 @@ import rp from 'request-promise'
 const { CMC_KEY } = process.env
 const last = new Map()
 
-const COINS_LIMIT = 100
-const EXPIRE = 1000 * 60 * 59
+const COINS_LIMIT = 300
+const EXPIRE = 1000 * 60 * 60 * 3
 const DELETE_EVERY = 1000 * 60 * 20
 
 const requestOptions = {
@@ -25,10 +25,11 @@ const keepWinners = ({
 	quote: {
 		BTC: { percent_change_1h }
 	}
-}) => percent_change_1h >= 6
+}) => percent_change_1h >= 10
 const spread = ({
 	id,
 	symbol,
+	slug,
 	quote: {
 		BTC: { percent_change_1h }
 	}
@@ -37,15 +38,18 @@ const spread = ({
 	return {
 		id,
 		symbol,
+		slug,
 		percent_change_1h: percent_change_1h.toFixed(2),
 		expire: Date.now() + EXPIRE
 	}
 }
 
 const filterNew = ({ id }) => !last.has(id)
-const emoji = p => (p > 100 ? '🔞' : p > 50 ? '🛰' : p > 15 ? '🚀' : '🔥')
-const coinToMsg = ({ symbol, percent_change_1h }) =>
-	`*$${symbol}* _(+${percent_change_1h}%)_ ${emoji(percent_change_1h)}`
+const emoji = p => (p > 200 ? '⁉️🏆🏄' : p > 100 ? '🔞' : p > 50 ? '🛰' : p > 25 ? '🚀' : '🔥')
+const coinToMsg = ({ symbol, percent_change_1h, slug }) =>
+	`*[$${symbol}](https://coinmarketcap.com/currencies/${slug}/)* (+${percent_change_1h}%) ${emoji(
+		percent_change_1h
+	)}`
 
 setInterval(() => {
 	for (let [id, { expire }] of last.entries())
@@ -64,6 +68,7 @@ export default async () => {
 	if (!cryptos.length) return
 	cryptos.forEach(c => last.set(c.id, c))
 	const reducedCoins = cryptos.map(coinToMsg).reduce((a, b) => `${a}\n${b}`, '')
-	return `WOOOOSH CA PUMP ! 🌚
-${reducedCoins}`
+	return `WOOOOSH ¯\\\_(ツ)_/¯ ! 🌚
+_(Top ${COIN_LIMIT} 24h winners)_
+	${reducedCoins}`
 }
