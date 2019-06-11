@@ -1,11 +1,12 @@
 import { MongoClient } from 'mongodb'
 const { MONGO_URI } = process.env
 
-let energy = 1
+const maxEnergy = 30
+let energy = maxEnergy
 const regenEvery = 1000 * 60 * 3
 
 setInterval(() => {
-	if (energy < 15) energy++
+	if (energy < maxEnergy) energy++
 }, regenEvery)
 
 const emotions = {
