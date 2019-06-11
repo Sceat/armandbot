@@ -3,7 +3,7 @@ import rp from 'request-promise'
 const { CMC_KEY } = process.env
 const last = new Map()
 
-const COINS_LIMIT = 300
+const COINS_LIMIT = 100
 const EXPIRE = 1000 * 60 * 60 * 3
 const DELETE_EVERY = 1000 * 60 * 20
 

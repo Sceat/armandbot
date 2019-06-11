@@ -2,10 +2,11 @@ import Telegraf from 'telegraf'
 import express from 'express'
 import http from 'http'
 import cmc, { btcUp } from './cmc'
-import Giphy from 'giphy-random'
+import rp from 'request-promise'
+import { getResponseToMsg, getColl, learnMsg } from './ia'
 
 const VERSION = require('../package.json').version
-const { GIF_KEY = 'dc6zaTOxFJmzC ' } = process.env
+const { GIF_KEY = '6WAhWTpyYpj1KZE10LPlX3G6nvizflcL ', USE_IA = false } = process.env
 
 // DISCLAIMER
 // THE CODE OF THIS BOT IS ABSOLUTLY DOG SHIT
@@ -201,6 +202,87 @@ bot.hears('ris', ctx => {
 	ctx.replyWithPhoto(randRis(), { reply_to_message_id: msg?.reply_to_message?.message_id })
 })
 
+const charts = [
+	'mdr ce coin de singe',
+	`pk tu check le prix ? tu voit pas que ton destin c de perde de l'argent ?`,
+	'shitcoin spotted',
+	'tu fait honte a tes parents, sale chomeur, c dla merde ce coin',
+	`............ regardez le..
+	encore en train d'esperer que son shitcoin pump mdr`,
+	'ce coin de grosse tantouze mdr',
+	'wsh t pauvre assume non ? apporte moi une canette il sert a rien ce coin',
+	'olalala.. apelle moi quand tu trouvera un vrai coin..',
+	`pire shitcoin tu meur`,
+	`tu compte etre riche avec ca ? MDR`,
+	`ce pauvre type ne sait plus quoi buy`,
+	`vrmt jte pensait pas aussi con, hold du BTC plutot -_-`,
+	'ptin meme moi je buy pas des merde pareil',
+	'lol.. encore un coin de gitan homosexuel',
+	'ya pas plus gayouz que ce shitcoin',
+	'gros autant buy du xbl a ce compte la..'
+]
+
+const any = [
+	'jte pensait pas aussi con',
+	`qui s'en fou ?`,
+	'genre ? attend jmen branle',
+	`c marren quand mm que personne s'interesse a ta vie`,
+	'magnifique..',
+	'oui',
+	`j'aprouve`,
+	`assez d'accord..`,
+	'c pas fau',
+	'attend mdr g vrmt pas lu',
+	'hein ?',
+	'pk tu parle comme un singe',
+	'mais mec tg',
+	'jtecoute absolument pas',
+	'pk',
+	'tkt pas',
+	`t vrmt un putin d'insecure`,
+	'btc va pump soon',
+	'mdr..',
+	'devons nous te considérer comme une divinité ?',
+	'Ouvrez les yeux sur ki est vraiment cet homme fourbe',
+	'oklm'
+]
+const randChart = () => charts[Math.floor(Math.random() * charts.length)]
+const randAny = () => any[Math.floor(Math.random() * any.length)]
+
+const coll = getColl()
+
+const isReplyToArmand = reply => reply.from.id === 800151780
+
+bot.on('message', ctx => {
+	const msg = ctx.update?.message?.text
+	if (`${ctx.chat.id}` !== TG_ROOM) return
+	if (!msg) return
+	coll.then(coll => learnMsg(coll)(msg))
+	if (msg.startsWith('/c')) {
+		const last = replied.get('/c') || 0
+		if (randBool() && Date.now() > last + 1000 * 60 * 5) {
+			ctx.reply(randChart(), { reply_to_message_id: ctx?.update?.message?.message_id })
+			replied.set('/c', Date.now())
+		}
+	} else if (Math.random() >= 0.9) {
+		const last = replied.get('any') || 0
+		if (Date.now() > last + 1000 * 60 * 10) {
+			ctx.reply(randAny(), { reply_to_message_id: ctx?.update?.message?.message_id })
+			replied.set('any', Date.now())
+		}
+	} else if (USE_IA) {
+		coll.then(coll => {
+			if (isReplyToArmand(ctx.update?.message?.reply_to_message) || Math.random() >= 0.9) {
+				const response = getResponseToMsg(coll)(msg)
+				if (response)
+					response.then(resp =>
+						ctx.reply(resp, { reply_to_message_id: ctx?.update?.message?.message_id })
+					)
+			}
+		})
+	}
+})
+
 const kenArrayRegex = [
 	/\bjbaise\b/,
 	/\bjken\b/,
@@ -212,6 +294,8 @@ const kenArrayRegex = [
 	/\bJTEBAIZ\b/,
 	/\bjnik\b/,
 	/\bniker\b/,
+	/\bfuck\b/,
+	/\bFUCK\b/,
 	/\bjbaiz\b/,
 	/\bsucer\b/,
 	/\bchatte\b/,
@@ -270,6 +354,9 @@ const quotesBtc = [
 
 const randGay = () => quotesBtc[Math.floor(Math.random() * quotesBtc.length)]
 
+const getGif = async tag =>
+	rp.get(`https://api.giphy.com/v1/gifs/random?tag=${tag}&api_key=${GIF_KEY}`).then(JSON.parse)
+
 const pollBtc = () => {
 	btcUp().then(percent => {
 		if (percent > 8) {
@@ -283,13 +370,12 @@ const pollBtc = () => {
 					disable_web_page_preview: true
 				}
 			)
-			bot.telegram.sendVideo(TG_ROOM, 'https://media.giphy.com/media/8LWOXKCJxAOic/giphy.gif')
+			getGif('dancing').then(({ data: { image_url } }) =>
+				bot.telegram.sendVideo(TG_ROOM, image_url)
+			)
 		}
 	})
 }
-
-const dancingGif = async () => Giphy(GIF_KEY, { tag: 'dancing' })
-const horrayGif = async () => Giphy(GIF_KEY, { tag: 'horray' })
 
 bot.telegram.sendMessage(
 	TG_ROOM,
@@ -297,10 +383,10 @@ bot.telegram.sendMessage(
 @sceat le bg vient de me deployer en version *${VERSION}* 🎉`,
 	{ parse_mode: 'Markdown' }
 )
-bot.telegram.sendVideo(TG_ROOM, 'https://media.giphy.com/media/GxZpLbwKRQo0M/giphy.gif')
-// horrayGif().then(({ data: { image_mp4_url } }) => bot.telegram.sendVideo(TG_ROOM, image_mp4_url))
 
-setInterval(() => poll(), 1000 * 60 * 10)
+getGif('horray').then(({ data: { image_url } }) => bot.telegram.sendVideo(TG_ROOM, image_url))
+
+setInterval(() => poll(), 1000 * 60 * 23)
 setInterval(() => pollBtc(), 1000 * 60 * 60)
 
 setInterval(() => {

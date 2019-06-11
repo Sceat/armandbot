@@ -1,0 +1,196 @@
+import { MongoClient } from 'mongodb'
+const { MONGO_URI } = process.env
+
+let energy = 1
+const regenEvery = 1000 * 60 * 3
+
+setInterval(() => {
+	if (energy < 15) energy++
+}, regenEvery)
+
+const emotions = {
+	AGREE: {
+		parse: [
+			'oui',
+			'yep',
+			'oe',
+			'ouai',
+			'ouaip',
+			'yes',
+			'indeed',
+			'effectivement',
+			'c sur',
+			'sure',
+			'wai',
+			'ui',
+			'moe',
+			'mwai',
+			'mouai'
+		],
+		respondTo: ['AGREE', 'DISAGREE', 'HAPPY', 'SAD', 'ANGER', 'SURPRISE', 'AFFIRM', 'ASK']
+	},
+	DISAGREE: {
+		parse: ['nn', 'non', 'nop', 'bof', 'depend', 'pas', 'ne'],
+		respondTo: ['AGREE', 'DISAGREE', 'SAD', 'ANGER', 'SURPRISE', 'AFFIRM', 'ASK']
+	},
+	HAPPY: {
+		parse: [
+			'cool',
+			'super',
+			'top',
+			'genial',
+			'nice',
+			'haha',
+			'mdr',
+			'excelent',
+			'excellent',
+			'nikel',
+			'bien'
+		],
+		respondTo: ['AGREE', 'DISAGREE', 'HAPPY', 'SURPRISE', 'AFFIRM', 'SAD', 'ANGER']
+	},
+	SAD: {
+		parse: [
+			'shit',
+			'ptin',
+			'aie',
+			'dommage',
+			'chier',
+			'mince',
+			'rip',
+			'rekt',
+			'ouch',
+			'ca pique',
+			'...',
+			'oh nn',
+			'tin',
+			'roh',
+			'vdm',
+			'fml',
+			'berk'
+		],
+		respondTo: ['AGREE', 'DISAGREE', 'HAPPY', 'SAD', 'ANGER', 'SURPRISE', 'AFFIRM']
+	},
+	ANGER: {
+		parse: [
+			'putin',
+			'fdp',
+			'conar',
+			'enculer',
+			'pd',
+			'suce',
+			'ntm',
+			'chie',
+			'lever',
+			'baise',
+			'baiz',
+			'nike',
+			'fuck',
+			'merde',
+			'couille',
+			'branle',
+			'tg',
+			'connard',
+			'frapper',
+			'jte prend',
+			'1v1'
+		],
+		respondTo: ['AGREE', 'DISAGREE', 'HAPPY', 'SAD', 'ANGER', 'SURPRISE', 'ASK', 'AFFIRM', 'THANKS']
+	},
+	SURPRISE: {
+		parse: ['wtf', 'what', 'insane', 'mec..', 'gros', 'cmt c possible', 'awai', 'damn', 'bordel'],
+		respondTo: ['AGREE', 'DISAGREE', 'HAPPY', 'SAD', 'ANGER', 'SURPRISE', 'ASK', 'AFFIRM', 'THANKS']
+	},
+	ASK: {
+		parse: ['?', 'hein', 'pk', 'cmt', 'comment', 'how', '??', '???', 'wut', 'coment', 'explique'],
+		respondTo: ['AGREE', 'DISAGREE', 'SURPRISE', 'ASK', 'AFFIRM']
+	},
+	AFFIRM: {
+		parse: ['!'],
+		respondTo: ['HAPPY', 'ASK', 'AFFIRM', 'THANKS']
+	},
+	THANKS: {
+		parse: ['thx', 'merci', 'cimer', 'thanks'],
+		respondTo: ['AFFIRM']
+	}
+}
+
+const msgToEmotion = msg => {
+	const msgLow = msg.toLowerCase()
+	for (let [emotion, obj] of Object.entries(emotions)) {
+		for (let em of obj.parse) {
+			if (msgLow.includes(em)) return emotion
+		}
+	}
+	return Math.random() >= 0.7 ? 'AFFIRM' : undefined
+}
+
+const getSentenceOfEmotion = coll => async e => {
+	const ss = await coll
+		.find({ type: e })
+		.limit(1)
+		.toArray()
+		.then(([obj]) => obj.speach)
+	return ss[Math.floor(Math.random() * ss.length)]
+}
+
+const getResponseToEmotion = coll => e => {
+	const possibleResponsesEmotion = []
+	for (let [emotion, obj] of Object.entries(emotions)) {
+		if (obj.respondTo.includes(e)) possibleResponsesEmotion.push(emotion)
+	}
+	return getSentenceOfEmotion(coll)(
+		possibleResponsesEmotion[Math.floor(Math.random() * possibleResponsesEmotion.length)]
+	)
+}
+
+// export const insert = coll => {
+// 	for (let [emotion, obj] of Object.entries(emotions))
+// 	coll.insertOne({
+// 		type: emotion,
+// 		speach: []
+// 	})
+// }
+
+export const learnMsg = coll => async msg => {
+	const e = msgToEmotion(msg)
+	if (e) {
+		const speach = await coll
+			.find({ type: e })
+			.limit(1)
+			.toArray()
+			.then(([obj]) => obj.speach)
+		speach.push(msg)
+		coll.updateOne({ type: e }, { $set: { speach: [...new Set(speach)] } })
+	}
+}
+
+const noEnergy = [
+	'laisse moi trkl',
+	'jrepon plu',
+	'ok',
+	'tg',
+	'laissez moi putin',
+	`i'm out`,
+	'jrepon plus bro',
+	'wrong destinataire',
+	'adresse toi a mon voiturier',
+	'jparle pas au paysans',
+	'jtai dit quoi, stop!'
+]
+
+const randHS = () => noEnergy[Math.floor(Math.random() * noEnergy.length)]
+
+export const getResponseToMsg = coll => msg => {
+	const e = msgToEmotion(msg)
+	if (energy < 1) return Math.random() >= 0.5 ? new Promise(res => res(randHS())) : undefined
+	if (!e) return
+	energy--
+	console.log(`${energy} energie restante`)
+	return getResponseToEmotion(coll)(e)
+}
+
+export async function getColl() {
+	const mongo = await MongoClient.connect(MONGO_URI, { useNewUrlParser: true })
+	return mongo.db('armand').collection('speach')
+}

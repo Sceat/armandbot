@@ -14,7 +14,7 @@
   "dependencies": {
     "@hydre/commons": "^1.0.18",
     "express": "^4.17.1",
-    "giphy-random": "^2.0.8",
+    "mongodb": "^3.2.7",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
     "telegraf": "^3.30.1"
