@@ -3,7 +3,7 @@ const { MONGO_URI } = process.env
 
 const maxEnergy = 30
 let energy = maxEnergy
-const regenEvery = 1000 * 60 * 3
+const regenEvery = 1000 * 60 * 1
 
 setInterval(() => {
 	if (energy < maxEnergy) energy++

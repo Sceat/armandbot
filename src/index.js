@@ -251,7 +251,7 @@ const randAny = () => any[Math.floor(Math.random() * any.length)]
 
 const coll = getColl()
 
-const isReplyToArmand = reply => reply.from.id === 800151780
+const isReplyToArmand = reply => reply?.from?.id === 800151780
 
 bot.on('message', ctx => {
 	const msg = ctx.update?.message?.text
