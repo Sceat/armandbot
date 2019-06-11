@@ -3,7 +3,7 @@ import express from 'express'
 import http from 'http'
 import cmc, { btcUp } from './cmc'
 import rp from 'request-promise'
-import { getResponseToMsg, getColl, learnMsg } from './ia'
+import { getResponseToMsg, getColl, learnMsg, msgToEmotion } from './ia'
 
 const VERSION = require('../package.json').version
 const { GIF_KEY = '6WAhWTpyYpj1KZE10LPlX3G6nvizflcL ', USE_IA = false } = process.env
@@ -248,7 +248,8 @@ const any = [
 ]
 const randChart = () => charts[Math.floor(Math.random() * charts.length)]
 const randAny = () => any[Math.floor(Math.random() * any.length)]
-
+const getGif = async tag =>
+	rp.get(`https://api.giphy.com/v1/gifs/random?tag=${tag}&api_key=${GIF_KEY}`).then(JSON.parse)
 const coll = getColl()
 
 const isReplyToArmand = reply => reply?.from?.id === 800151780
@@ -274,10 +275,18 @@ bot.on('message', ctx => {
 		coll.then(coll => {
 			if (isReplyToArmand(ctx.update?.message?.reply_to_message) || Math.random() >= 0.9) {
 				const response = getResponseToMsg(coll)(msg)
-				if (response)
-					response.then(resp =>
-						ctx.reply(resp, { reply_to_message_id: ctx?.update?.message?.message_id })
-					)
+				if (response) {
+					if (Math.random() >= 0.9)
+						getGif(msgToEmotion(msg) || 'ok').then(({ data: { image_url } }) =>
+							ctx.replyWithVideo(image_url, {
+								reply_to_message_id: ctx?.update?.message?.message_id
+							})
+						)
+					else
+						response.then(resp =>
+							ctx.reply(resp, { reply_to_message_id: ctx?.update?.message?.message_id })
+						)
+				}
 			}
 		})
 	}
@@ -354,8 +363,10 @@ const quotesBtc = [
 
 const randGay = () => quotesBtc[Math.floor(Math.random() * quotesBtc.length)]
 
-const getGif = async tag =>
-	rp.get(`https://api.giphy.com/v1/gifs/random?tag=${tag}&api_key=${GIF_KEY}`).then(JSON.parse)
+const getNudes = async () =>
+	rp
+		.get(`https://api.giphy.com/v1/gifs/random?tag=sexy&rating=R&api_key=${GIF_KEY}`)
+		.then(JSON.parse)
 
 const pollBtc = () => {
 	btcUp().then(percent => {
@@ -370,9 +381,7 @@ const pollBtc = () => {
 					disable_web_page_preview: true
 				}
 			)
-			getGif('dancing').then(({ data: { image_url } }) =>
-				bot.telegram.sendVideo(TG_ROOM, image_url)
-			)
+			getGif('money').then(({ data: { image_url } }) => bot.telegram.sendVideo(TG_ROOM, image_url))
 		}
 	})
 }
@@ -380,14 +389,24 @@ const pollBtc = () => {
 bot.telegram.sendMessage(
 	TG_ROOM,
 	`Oh Oh Oh ! *Je suis armand* le bot qui parle chinois.
-@sceat le bg vient de me deployer en version *${VERSION}* 🎉`,
+Je vient de me mettre a jour en version *${VERSION}* 🎉`,
 	{ parse_mode: 'Markdown' }
 )
 
-getGif('horray').then(({ data: { image_url } }) => bot.telegram.sendVideo(TG_ROOM, image_url))
+getGif('dancing').then(({ data: { image_url } }) => bot.telegram.sendVideo(TG_ROOM, image_url))
 
 setInterval(() => poll(), 1000 * 60 * 23)
 setInterval(() => pollBtc(), 1000 * 60 * 60)
+
+const getRandTimeBetween = min => max => Math.floor(Math.random() * (max - min + 1) + min)
+
+const sendNudes = () => {
+	getNudes()
+		.then(({ data: { image_url } }) => bot.telegram.sendVideo(TG_ROOM, image_url))
+		.then(() => setTimeout(() => sendNudes(), 1000 * 60 * getRandTimeBetween(40)(400)))
+}
+
+setTimeout(sendNudes, 1000 * 60 * getRandTimeBetween(12)(26))
 
 setInterval(() => {
 	http.get('http://armandbot.herokuapp.com/')

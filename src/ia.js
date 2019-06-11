@@ -116,7 +116,7 @@ const emotions = {
 	}
 }
 
-const msgToEmotion = msg => {
+export const msgToEmotion = msg => {
 	const msgLow = msg.toLowerCase()
 	for (let [emotion, obj] of Object.entries(emotions)) {
 		for (let em of obj.parse) {
