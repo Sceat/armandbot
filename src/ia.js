@@ -123,7 +123,7 @@ const emotions = {
 	},
 	AFFIRM: {
 		parse: ['!'],
-		respondTo: ['ASK', 'AFFIRM', 'THANKS']
+		respondTo: ['ASK', 'AFFIRM', 'THANKS', 'AGREE', 'DISAGREE', 'SURPRISE']
 	},
 	THANKS: {
 		parse: ['thx', 'merci', 'cimer', 'thanks'],
