@@ -370,7 +370,7 @@ const getNudes = async () =>
 
 const pollBtc = () => {
 	btcUp().then(percent => {
-		if (percent > 8) {
+		if (percent > 5) {
 			bot.telegram.sendMessage(
 				TG_ROOM,
 				`${randGay()}
