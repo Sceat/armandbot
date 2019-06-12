@@ -28,11 +28,11 @@ const emotions = {
 			'mwai',
 			'mouai'
 		],
-		respondTo: ['AGREE', 'DISAGREE', 'HAPPY', 'SAD', 'ANGER', 'SURPRISE', 'AFFIRM', 'ASK']
+		respondTo: ['AGREE', 'AFFIRM', 'ASK']
 	},
 	DISAGREE: {
 		parse: ['nn', 'non', 'nop', 'bof', 'depend', 'pas', 'ne'],
-		respondTo: ['AGREE', 'DISAGREE', 'SAD', 'ANGER', 'SURPRISE', 'AFFIRM', 'ASK']
+		respondTo: ['DISAGREE', 'AFFIRM', 'ASK']
 	},
 	HAPPY: {
 		parse: [
@@ -48,7 +48,7 @@ const emotions = {
 			'nikel',
 			'bien'
 		],
-		respondTo: ['AGREE', 'DISAGREE', 'HAPPY', 'SURPRISE', 'AFFIRM', 'SAD', 'ANGER']
+		respondTo: ['HAPPY', 'SURPRISE', 'AFFIRM', 'SAD']
 	},
 	SAD: {
 		parse: [
@@ -70,7 +70,7 @@ const emotions = {
 			'fml',
 			'berk'
 		],
-		respondTo: ['AGREE', 'DISAGREE', 'HAPPY', 'SAD', 'ANGER', 'SURPRISE', 'AFFIRM']
+		respondTo: ['DISAGREE', 'SAD', 'ANGER']
 	},
 	ANGER: {
 		parse: [
@@ -100,15 +100,15 @@ const emotions = {
 	},
 	SURPRISE: {
 		parse: ['wtf', 'what', 'insane', 'mec..', 'gros', 'cmt c possible', 'awai', 'damn', 'bordel'],
-		respondTo: ['AGREE', 'DISAGREE', 'HAPPY', 'SAD', 'ANGER', 'SURPRISE', 'ASK', 'AFFIRM', 'THANKS']
+		respondTo: ['SURPRISE', 'ASK', 'AFFIRM']
 	},
 	ASK: {
 		parse: ['?', 'hein', 'pk', 'cmt', 'comment', 'how', '??', '???', 'wut', 'coment', 'explique'],
-		respondTo: ['AGREE', 'DISAGREE', 'SURPRISE', 'ASK', 'AFFIRM']
+		respondTo: ['SURPRISE', 'ASK', 'AFFIRM']
 	},
 	AFFIRM: {
 		parse: ['!'],
-		respondTo: ['HAPPY', 'ASK', 'AFFIRM', 'THANKS']
+		respondTo: ['ASK', 'AFFIRM', 'THANKS']
 	},
 	THANKS: {
 		parse: ['thx', 'merci', 'cimer', 'thanks'],
