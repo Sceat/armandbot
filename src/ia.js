@@ -101,6 +101,8 @@ const emotions = {
 			'boloss',
 			'noob',
 			'puta',
+			'tryzo',
+			'mere',
 			'salope',
 			'branle',
 			'tg',
