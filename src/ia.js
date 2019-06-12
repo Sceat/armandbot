@@ -87,6 +87,11 @@ const emotions = {
 			'baiz',
 			'nike',
 			'fuck',
+			'pute',
+			'chibre',
+			'verge',
+			'falus',
+			'mort'
 			'merde',
 			'couille',
 			'branle',
