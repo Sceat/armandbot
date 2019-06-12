@@ -252,7 +252,8 @@ const getGif = async tag =>
 	rp.get(`https://api.giphy.com/v1/gifs/random?tag=${tag}&api_key=${GIF_KEY}`).then(JSON.parse)
 const coll = getColl()
 
-const isReplyToArmand = reply => reply?.from?.id === 800151780
+const isReplyToArmand = msg =>
+	msg?.reply_to_message?.from?.id === 800151780 || msg?.text?.toLowerCase()?.includes('armand')
 
 bot.on('message', ctx => {
 	const msg = ctx.update?.message?.text
@@ -273,7 +274,7 @@ bot.on('message', ctx => {
 		}
 	} else if (USE_IA) {
 		coll.then(coll => {
-			if (isReplyToArmand(ctx.update?.message?.reply_to_message) || Math.random() >= 0.9) {
+			if (isReplyToArmand(ctx.update?.message) || Math.random() >= 0.9) {
 				const response = getResponseToMsg(coll)(msg)
 				if (response) {
 					if (Math.random() >= 0.9)
