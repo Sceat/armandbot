@@ -83,6 +83,8 @@ const emotions = {
 			'ntm',
 			'chie',
 			'lever',
+			'faible',
+			'mikel',
 			'baise',
 			'baiz',
 			'nike',
