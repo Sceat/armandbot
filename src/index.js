@@ -257,9 +257,9 @@ const isReplyToArmand = msg =>
 
 bot.on('message', ctx => {
 	const msg = ctx.update?.message?.text
-	if (`${ctx.chat.id}` !== TG_ROOM) return
 	if (!msg) return
 	coll.then(coll => learnMsg(coll)(msg))
+	if (`${ctx.chat.id}` !== TG_ROOM) return
 	if (msg.startsWith('/c')) {
 		const last = replied.get('/c') || 0
 		if (randBool() && Date.now() > last + 1000 * 60 * 5) {
