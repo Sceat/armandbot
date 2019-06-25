@@ -266,7 +266,7 @@ bot.on('message', ctx => {
 			ctx.reply(randChart(), { reply_to_message_id: ctx?.update?.message?.message_id })
 			replied.set('/c', Date.now())
 		}
-	} else if (Math.random() >= 0.9) {
+	} else if (Math.random() >= 0.97) {
 		const last = replied.get('any') || 0
 		if (Date.now() > last + 1000 * 60 * 10) {
 			ctx.reply(randAny(), { reply_to_message_id: ctx?.update?.message?.message_id })
