@@ -9,4 +9,4 @@ deploy:
   app: armand-subspace
   script: echo "Deploying to heroku ..."
   on:
-    tags: true
+    tags: false
