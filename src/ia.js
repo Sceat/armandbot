@@ -162,13 +162,14 @@ const getResponseToEmotion = coll => e => {
 	)
 }
 
-// export const insert = coll => {
-// 	for (let [emotion, obj] of Object.entries(emotions))
-// 	coll.insertOne({
-// 		type: emotion,
-// 		speach: []
-// 	})
-// }
+const insert = coll => {
+	for (let [emotion, obj] of Object.entries(emotions))
+	coll.insertOne({
+		type: emotion,
+		speach: []
+	})
+}
+
 
 export const learnMsg = coll => async msg => {
 	const e = msgToEmotion(msg)
@@ -212,3 +213,5 @@ export async function getColl() {
 	const mongo = await MongoClient.connect(MONGO_URI, { useNewUrlParser: true })
 	return mongo.db('armand').collection('subspace')
 }
+
+insert(getColl())
