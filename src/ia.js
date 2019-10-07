@@ -163,4 +163,4 @@ export async function getColl() {
 	return mongo.db('armand').collection('subspace')
 }
 
-getColl().then(insert)
+// getColl().then(insert)
