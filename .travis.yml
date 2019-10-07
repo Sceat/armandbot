@@ -8,4 +8,5 @@ deploy:
   api_key: '$HEROKU_TOKEN'
   app: armand-subspace
   script: echo "Deploying to heroku ..."
-  
+  on:
+    tags: true
