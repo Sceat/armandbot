@@ -1,7 +1,7 @@
 import { MongoClient } from 'mongodb'
 const { MONGO_URI } = process.env
 
-const maxEnergy = 30
+const maxEnergy = 50
 let energy = maxEnergy
 const regenEvery = 1000 * 60 * 1
 
@@ -22,6 +22,8 @@ const emotions = {
 			'effectivement',
 			'c sur',
 			'sure',
+			'sur',
+			'vrai',
 			'wai',
 			'ui',
 			'moe',
@@ -185,8 +187,8 @@ const noEnergy = [
 	'laisse moi trkl',
 	'jrepon plu',
 	'ok',
-	'tg',
-	'laissez moi putin',
+	'chut',
+	'laissez moi merci',
 	`i'm out`,
 	'jrepon plus bro',
 	'wrong destinataire',
@@ -208,5 +210,5 @@ export const getResponseToMsg = coll => msg => {
 
 export async function getColl() {
 	const mongo = await MongoClient.connect(MONGO_URI, { useNewUrlParser: true })
-	return mongo.db('armand').collection('speach')
+	return mongo.db('armand').collection('subspace')
 }

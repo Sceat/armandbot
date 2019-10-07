@@ -6,8 +6,9 @@ script:
 deploy:
   provider: heroku
   api_key: '$HEROKU_TOKEN'
-  app: armandbot
+  app: 
+    master: armandbot
+    subspace: armand-subspace
   script: echo "Deploying to heroku ..."
   on:
     tags: true
-    branch: master

@@ -99,13 +99,13 @@ const pRep = sometimeReplyTo(bot)
 const fdpRep = [
 	'oh tu croi t ki pr parler comme ca ?',
 	'mais mdr parle mieux jvai te lever',
-	'ftg tu parle a ki',
-	'oh lui jvai vrmt le lever',
+	'tu parle a ki',
+	'oh lui faut le sortir',
 	'jsai pa t ki mais reste trkl'
 ]
 
 const btcRep = [
-	'tg sale pauvre',
+	'c chaud comment t pauvre',
 	'clochar',
 	'c mort soon 1k',
 	'mdr..',
@@ -123,8 +123,7 @@ const marginRep = [
 	'le margin c vrmt pour les singe',
 	'jpense que t fait pr etre pauvre',
 	'ouai ouai',
-	'mec t t encore un putin de sperma je tradai deja',
-	'ouai de ouf! non tg',
+	'ouai de ouf! non en fait',
 	'awai ? g pa lu',
 	'ok.',
 	'uiui si tu veu tkt pas ca va aller'
@@ -132,27 +131,23 @@ const marginRep = [
 
 const stpRep = [
 	'tema ce mandiant mdr',
-	'wsh demerde toi non ?',
+	'wsh debrouille toi non ?',
 	'jpp de toi..',
-	'suce au lieu de faire la manche comme ca',
-	'clochar',
+	'travaille au lieu de faire la manche comme ca',
 	't le gitan dla room ?',
 	'mdr encore toi ?'
 ]
 
 const kenRep = [
-	'tu baise rien du tout',
-	't puceau et tu parle',
-	'tlm sait ke t pd',
-	'en vrai on sen branle',
+	'tlm sait ke t gay',
+	'en vrai on sen fou',
 	'meme un chameau de dubai ken plus que toi',
-	'micro teub',
-	't pd',
-	'allez ferme la baltringue',
+	'micro verge',
+	'allez ca suffit',
 	"jpense vrmt ta un complexe d'inferioriter",
-	'ptite pucelle tu baise walou',
+	'ptite vierge tu fornique walou',
 	'ta bsoin de prouver qqchose ?',
-	'mdr grolar tu ment encore et encore'
+	'mdr tu ment encore et encore'
 ]
 
 const risitas = [
@@ -206,27 +201,24 @@ const charts = [
 	'mdr ce coin de singe',
 	`pk tu check le prix ? tu voit pas que ton destin c de perde de l'argent ?`,
 	'shitcoin spotted',
-	'tu fait honte a tes parents, sale chomeur, c dla merde ce coin',
 	`............ regardez le..
 	encore en train d'esperer que son shitcoin pump mdr`,
-	'ce coin de grosse tantouze mdr',
+	'ce coin de pauvre mdr',
 	'wsh t pauvre assume non ? apporte moi une canette il sert a rien ce coin',
 	'olalala.. apelle moi quand tu trouvera un vrai coin..',
 	`pire shitcoin tu meur`,
 	`tu compte etre riche avec ca ? MDR`,
-	`ce pauvre type ne sait plus quoi buy`,
-	`vrmt jte pensait pas aussi con, hold du BTC plutot -_-`,
-	'ptin meme moi je buy pas des merde pareil',
-	'lol.. encore un coin de gitan homosexuel',
-	'ya pas plus gayouz que ce shitcoin',
-	'gros autant buy du xbl a ce compte la..'
+	`vrmt hold du BTC plutot -_-`,
+	'meme moi je buy pas des shitcoin pareil',
+	'lol.. encore un coin perdu',
+	'ya pas plus scam que ce shitcoin'
 ]
 
 const any = [
-	'jte pensait pas aussi con',
+	'jte pensait pas aussi pauvre',
 	`qui s'en fou ?`,
-	'genre ? attend jmen branle',
-	`c marren quand mm que personne s'interesse a ta vie`,
+	'genre ? attend c trop lol',
+	`c marren quand mm que personne s'interesse a cke tu raconte`,
 	'magnifique..',
 	'oui',
 	`j'aprouve`,
@@ -234,12 +226,11 @@ const any = [
 	'c pas fau',
 	'attend mdr g vrmt pas lu',
 	'hein ?',
-	'pk tu parle comme un singe',
-	'mais mec tg',
+	'pk tu parle comme un primate ?',
+	'mais mec..',
 	'jtecoute absolument pas',
 	'pk',
 	'tkt pas',
-	`t vrmt un putin d'insecure`,
 	'btc va pump soon',
 	'mdr..',
 	'devons nous te considérer comme une divinité ?',
@@ -258,8 +249,8 @@ const isReplyToArmand = msg =>
 bot.on('message', ctx => {
 	const msg = ctx.update?.message?.text
 	if (!msg) return
-	coll.then(coll => learnMsg(coll)(msg))
 	if (`${ctx.chat.id}` !== TG_ROOM) return
+	coll.then(coll => learnMsg(coll)(msg))
 	if (msg.startsWith('/c')) {
 		const last = replied.get('/c') || 0
 		if (randBool() && Date.now() > last + 1000 * 60 * 5) {
@@ -278,7 +269,7 @@ bot.on('message', ctx => {
 				const response = getResponseToMsg(coll)(msg)
 				if (response) {
 					if (Math.random() >= 0.9)
-						getGif(msgToEmotion(msg) || 'ok').then(({ data: { image_url } }) =>
+						getGif(msgToEmotion(msg) || 'exasperated').then(({ data: { image_url } }) =>
 							ctx.replyWithVideo(image_url, {
 								reply_to_message_id: ctx?.update?.message?.message_id
 							})
@@ -350,7 +341,7 @@ const poll = () => {
 const quotesBtc = [
 	`Si un homme n'embrasse pas une femme au premier rendez-vous, c'est un gentleman. Au second, c'est qu'il est gay`,
 	`Heureux de vivre comme une cigale`,
-	`J'aimerais être gay juste pour faire chier les homophobest`,
+	`J'aimerais être gay juste pour faire chier les homophobes`,
 	`Être gay n'est pas une invention occidentale. C'est une réalité humaine`,
 	`- Êtes vous homosexuel, répondez à la question ! Êtes vous un homo ? Êtes vous une pédale, une tapette, une folle, une chochotte un empaffé, un de la jaquette, une tantouse ? ÊTES VOUS GAY `,
 	`Cela ne devrait jamais être un crime d'être gay`,
@@ -407,7 +398,7 @@ const sendNudes = () => {
 		.then(() => setTimeout(() => sendNudes(), 1000 * 60 * getRandTimeBetween(40)(400)))
 }
 
-setTimeout(sendNudes, 1000 * 60 * getRandTimeBetween(12)(26))
+// setTimeout(sendNudes, 1000 * 60 * getRandTimeBetween(12)(26))
 
 setInterval(() => {
 	http.get('http://armandbot.herokuapp.com/')
