@@ -10,4 +10,3 @@ deploy:
   script: echo "Deploying to heroku ..."
   on:
     tags: true
-    branch: master
