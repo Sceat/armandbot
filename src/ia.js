@@ -208,7 +208,7 @@ export const getResponseToMsg = coll => msg => {
 
 export async function getColl() {
 	const mongo = await MongoClient.connect(MONGO_URI, { useNewUrlParser: true })
-	return mongo.db('armand').collection('speach')
+	return mongo.db('armand').collection('blackhole')
 }
 
 getColl().then(insert)
