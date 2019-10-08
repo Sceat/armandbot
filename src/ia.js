@@ -1,7 +1,7 @@
 import { MongoClient } from 'mongodb'
 const { MONGO_URI } = process.env
 
-const maxEnergy = 50
+const maxEnergy = 30
 let energy = maxEnergy
 const regenEvery = 1000 * 60 * 1
 
@@ -11,7 +11,23 @@ setInterval(() => {
 
 const emotions = {
 	AGREE: {
-		parse: ['oui', 'yep', 'oe', 'ouai', 'ouaip', 'yes', 'indeed', 'effectivement', 'c sur', 'sure', 'sur', 'vrai', 'wai', 'ui', 'moe', 'mwai', 'mouai'],
+		parse: [
+			'oui',
+			'yep',
+			'oe',
+			'ouai',
+			'ouaip',
+			'yes',
+			'indeed',
+			'effectivement',
+			'c sur',
+			'sure',
+			'wai',
+			'ui',
+			'moe',
+			'mwai',
+			'mouai'
+		],
 		respondTo: ['AGREE', 'AFFIRM', 'ASK']
 	},
 	DISAGREE: {
@@ -19,11 +35,41 @@ const emotions = {
 		respondTo: ['DISAGREE', 'AFFIRM', 'ASK']
 	},
 	HAPPY: {
-		parse: ['cool', 'super', 'top', 'genial', 'nice', 'haha', 'mdr', 'excelent', 'excellent', 'nikel', 'bien'],
+		parse: [
+			'cool',
+			'super',
+			'top',
+			'genial',
+			'nice',
+			'haha',
+			'mdr',
+			'excelent',
+			'excellent',
+			'nikel',
+			'bien'
+		],
 		respondTo: ['HAPPY', 'SURPRISE', 'AFFIRM', 'SAD']
 	},
 	SAD: {
-		parse: ['shit', 'ptin', 'aie', 'dommage', 'chier', 'mince', 'rip', 'rekt', 'ouch', 'ca pique', '...', 'oh nn', 'tin', 'roh', 'vdm', 'fml', 'berk'],
+		parse: [
+			'shit',
+			'ptin',
+			'aie',
+			'dommage',
+			'chier',
+			'mince',
+			'rip',
+			'rekt',
+			'ouch',
+			'ca pique',
+			'...',
+			'oh nn',
+			'tin',
+			'roh',
+			'vdm',
+			'fml',
+			'berk'
+		],
 		respondTo: ['DISAGREE', 'SAD', 'ANGER']
 	},
 	ANGER: {
@@ -109,15 +155,17 @@ const getResponseToEmotion = coll => e => {
 	for (let [emotion, obj] of Object.entries(emotions)) {
 		if (obj.respondTo.includes(e)) possibleResponsesEmotion.push(emotion)
 	}
-	return getSentenceOfEmotion(coll)(possibleResponsesEmotion[Math.floor(Math.random() * possibleResponsesEmotion.length)])
+	return getSentenceOfEmotion(coll)(
+		possibleResponsesEmotion[Math.floor(Math.random() * possibleResponsesEmotion.length)]
+	)
 }
 
-const insert = coll => {
+export const insert = coll => {
 	for (let [emotion, obj] of Object.entries(emotions))
-		coll.insertOne({
-			type: emotion,
-			speach: []
-		})
+	coll.insertOne({
+		type: emotion,
+		speach: []
+	})
 }
 
 export const learnMsg = coll => async msg => {
@@ -137,8 +185,8 @@ const noEnergy = [
 	'laisse moi trkl',
 	'jrepon plu',
 	'ok',
-	'chut',
-	'laissez moi merci',
+	'tg',
+	'laissez moi putin',
 	`i'm out`,
 	'jrepon plus bro',
 	'wrong destinataire',
@@ -160,7 +208,7 @@ export const getResponseToMsg = coll => msg => {
 
 export async function getColl() {
 	const mongo = await MongoClient.connect(MONGO_URI, { useNewUrlParser: true })
-	return mongo.db('armand').collection('subspace')
+	return mongo.db('armand').collection('speach')
 }
 
-// getColl().then(insert)
+getColl().then(insert)

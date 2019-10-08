@@ -99,13 +99,13 @@ const pRep = sometimeReplyTo(bot)
 const fdpRep = [
 	'oh tu croi t ki pr parler comme ca ?',
 	'mais mdr parle mieux jvai te lever',
-	'tu parle a ki',
-	'oh lui faut le sortir',
+	'ftg tu parle a ki',
+	'oh lui jvai vrmt le lever',
 	'jsai pa t ki mais reste trkl'
 ]
 
 const btcRep = [
-	'c chaud comment t pauvre',
+	'tg sale pauvre',
 	'clochar',
 	'c mort soon 1k',
 	'mdr..',
@@ -123,7 +123,8 @@ const marginRep = [
 	'le margin c vrmt pour les singe',
 	'jpense que t fait pr etre pauvre',
 	'ouai ouai',
-	'ouai de ouf! non en fait',
+	'mec t t encore un putin de sperma je tradai deja',
+	'ouai de ouf! non tg',
 	'awai ? g pa lu',
 	'ok.',
 	'uiui si tu veu tkt pas ca va aller'
@@ -131,23 +132,27 @@ const marginRep = [
 
 const stpRep = [
 	'tema ce mandiant mdr',
-	'wsh debrouille toi non ?',
+	'wsh demerde toi non ?',
 	'jpp de toi..',
-	'travaille au lieu de faire la manche comme ca',
+	'suce au lieu de faire la manche comme ca',
+	'clochar',
 	't le gitan dla room ?',
 	'mdr encore toi ?'
 ]
 
 const kenRep = [
-	'tlm sait ke t gay',
-	'en vrai on sen fou',
+	'tu baise rien du tout',
+	't puceau et tu parle',
+	'tlm sait ke t pd',
+	'en vrai on sen branle',
 	'meme un chameau de dubai ken plus que toi',
-	'micro verge',
-	'allez ca suffit',
+	'micro teub',
+	't pd',
+	'allez ferme la baltringue',
 	"jpense vrmt ta un complexe d'inferioriter",
-	'ptite vierge tu fornique walou',
+	'ptite pucelle tu baise walou',
 	'ta bsoin de prouver qqchose ?',
-	'mdr tu ment encore et encore'
+	'mdr grolar tu ment encore et encore'
 ]
 
 const risitas = [
@@ -201,24 +206,27 @@ const charts = [
 	'mdr ce coin de singe',
 	`pk tu check le prix ? tu voit pas que ton destin c de perde de l'argent ?`,
 	'shitcoin spotted',
+	'tu fait honte a tes parents, sale chomeur, c dla merde ce coin',
 	`............ regardez le..
 	encore en train d'esperer que son shitcoin pump mdr`,
-	'ce coin de pauvre mdr',
+	'ce coin de grosse tantouze mdr',
 	'wsh t pauvre assume non ? apporte moi une canette il sert a rien ce coin',
 	'olalala.. apelle moi quand tu trouvera un vrai coin..',
 	`pire shitcoin tu meur`,
 	`tu compte etre riche avec ca ? MDR`,
-	`vrmt hold du BTC plutot -_-`,
-	'meme moi je buy pas des shitcoin pareil',
-	'lol.. encore un coin perdu',
-	'ya pas plus scam que ce shitcoin'
+	`ce pauvre type ne sait plus quoi buy`,
+	`vrmt jte pensait pas aussi con, hold du BTC plutot -_-`,
+	'ptin meme moi je buy pas des merde pareil',
+	'lol.. encore un coin de gitan homosexuel',
+	'ya pas plus gayouz que ce shitcoin',
+	'gros autant buy du xbl a ce compte la..'
 ]
 
 const any = [
-	'jte pensait pas aussi pauvre',
+	'jte pensait pas aussi con',
 	`qui s'en fou ?`,
-	'genre ? attend c trop lol',
-	`c marren quand mm que personne s'interesse a cke tu raconte`,
+	'genre ? attend jmen branle',
+	`c marren quand mm que personne s'interesse a ta vie`,
 	'magnifique..',
 	'oui',
 	`j'aprouve`,
@@ -226,11 +234,12 @@ const any = [
 	'c pas fau',
 	'attend mdr g vrmt pas lu',
 	'hein ?',
-	'pk tu parle comme un primate ?',
-	'mais mec..',
+	'pk tu parle comme un singe',
+	'mais mec tg',
 	'jtecoute absolument pas',
 	'pk',
 	'tkt pas',
+	`t vrmt un putin d'insecure`,
 	'btc va pump soon',
 	'mdr..',
 	'devons nous te considérer comme une divinité ?',
@@ -269,7 +278,7 @@ bot.on('message', ctx => {
 				const response = getResponseToMsg(coll)(msg)
 				if (response) {
 					if (Math.random() >= 0.9)
-						getGif(msgToEmotion(msg) || 'exasperated').then(({ data: { image_url } }) =>
+						getGif(msgToEmotion(msg) || 'ok').then(({ data: { image_url } }) =>
 							ctx.replyWithVideo(image_url, {
 								reply_to_message_id: ctx?.update?.message?.message_id
 							})
@@ -341,7 +350,7 @@ const poll = () => {
 const quotesBtc = [
 	`Si un homme n'embrasse pas une femme au premier rendez-vous, c'est un gentleman. Au second, c'est qu'il est gay`,
 	`Heureux de vivre comme une cigale`,
-	`J'aimerais être gay juste pour faire chier les homophobes`,
+	`J'aimerais être gay juste pour faire chier les homophobest`,
 	`Être gay n'est pas une invention occidentale. C'est une réalité humaine`,
 	`- Êtes vous homosexuel, répondez à la question ! Êtes vous un homo ? Êtes vous une pédale, une tapette, une folle, une chochotte un empaffé, un de la jaquette, une tantouse ? ÊTES VOUS GAY `,
 	`Cela ne devrait jamais être un crime d'être gay`,
@@ -366,8 +375,7 @@ const pollBtc = () => {
 			bot.telegram.sendMessage(
 				TG_ROOM,
 				`${randGay()}
-
-*le BTC est up ${percent.toFixed(2)}% aujourd'hui* 🍆`,
+*le BTC est up ${percent.toFixed(2)}% aujourd'hui* �`,
 				{
 					parse_mode: 'Markdown',
 					disable_web_page_preview: true
@@ -381,7 +389,7 @@ const pollBtc = () => {
 bot.telegram.sendMessage(
 	TG_ROOM,
 	`Oh Oh Oh ! *Je suis armand* le bot qui parle chinois.
-Je vient de me mettre a jour en version *${VERSION}* 🎉`,
+Je vient de me mettre a jour en version *${VERSION}* �`,
 	{ parse_mode: 'Markdown' }
 )
 
@@ -398,7 +406,7 @@ const sendNudes = () => {
 		.then(() => setTimeout(() => sendNudes(), 1000 * 60 * getRandTimeBetween(40)(400)))
 }
 
-// setTimeout(sendNudes, 1000 * 60 * getRandTimeBetween(12)(26))
+setTimeout(sendNudes, 1000 * 60 * getRandTimeBetween(12)(26))
 
 setInterval(() => {
 	http.get('http://armand-subspace.herokuapp.com/')
