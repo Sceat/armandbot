@@ -211,4 +211,4 @@ export async function getColl() {
 	return mongo.db('armand').collection('blackhole')
 }
 
-getColl().then(insert)
+// getColl().then(insert)
