@@ -8,5 +8,3 @@ deploy:
   api_key: '$HEROKU_TOKEN'
   app: armandbot
   script: echo "Deploying to heroku ..."
-  on:
-    tags: true
