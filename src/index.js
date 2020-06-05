@@ -4,6 +4,7 @@ import http from 'http'
 import cmc, { btcUp } from './cmc'
 import rp from 'request-promise'
 import { getResponseToMsg, getColl, learnMsg, msgToEmotion } from './ia'
+import util from 'util'
 
 const VERSION = require('../package.json').version
 const { GIF_KEY = '6WAhWTpyYpj1KZE10LPlX3G6nvizflcL ', USE_IA = false } = process.env
@@ -76,6 +77,10 @@ bot.hears('mock', ctx => {
 	if (!reply) return
 	ctx.replyWithPhoto(randDumb())
 	ctx.reply(mock(reply))
+})
+	
+bot.hears('infos', ctx => {
+	ctx.reply(util.inspect(ctx.from, false, null, false))
 })
 
 // bot.hears('test', console.log)
