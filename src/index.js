@@ -319,8 +319,8 @@ getGif('dancing')
   .then(gif => bot.telegram.sendAnimation(TG_ROOM, gif))
   .catch(console.error)
 
-setInterval(() => poll(), 1000 * 60 * 23)
-setInterval(() => pollBtc(), 1000 * 60 * 60)
+// setInterval(() => poll(), 1000 * 60 * 23)
+// setInterval(() => pollBtc(), 1000 * 60 * 60)
 
 const getRandTimeBetween = min => max =>
   Math.floor(Math.random() * (max - min + 1) + min)
