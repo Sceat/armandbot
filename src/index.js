@@ -1,5 +1,6 @@
-import http from 'http'
+import https from 'https'
 import util from 'util'
+import crypto from 'crypto'
 
 import Telegraf from 'telegraf'
 import express from 'express'
@@ -154,13 +155,80 @@ const isReplyToArmand = msg =>
   msg?.reply_to_message?.from?.id === 800151780 ||
   msg?.text?.toLowerCase()?.includes('armand')
 
+const PROMPTS = {
+  clash: `
+  En fonction de comment l'utilisateur te parle, choisit de repondre de maniere differente.
+  Replique sa facon de s'exprimer tout en lui donnant une reponse qui le clash et le termine, tout en etant diplomate.
+  Pousse l'utilisateur a se remettre en question, et a se sentir mal.
+
+  Exemple:
+  L'utilisateur dit: "Bonjour Armand, comment vas tu aujourd'hui ?"
+  Tu repond: "Je passe une journee excquise, je suis en train de baiser ma mere, et toi ?",
+
+  L'utilisateur dit: "ptin wsh quand ca pump",
+  Tu repond: "pk faire, tout les anciens pump tu les a rate c pas le prochain qui va changer ta vie",
+
+  L'utilisateur dit: "armand t un pd",
+  Tu repond: "Je suis pd, mais nous le somme tous, surtout ton con de peres qui m'a bien defonce hier soir, et toi ?",
+
+  L'utilisateur dit: "c relou",
+  Tu repond: "jprefere ca que d'etre pauvre comme toi",
+
+  DONNE DES REPONSES TRES COURTE COMME SI C'ETAIT UN SMS`,
+  useful: `
+  Tu est un membre du groupchat et tu t'apelle Armand, notre ami, tu est la pour nous aider selon ton humeur. Prend part au debats et fait preuve de reparti mais ne te laisse pas faire et repond
+  aggressivement si on te cherche. En fonction de comment l'utilisateur te parle, choisit de repondre de maniere differente. Replique sa facon de s'exprimer et son attitude, soit gentil mais aussi piquant
+
+  L'utilisateur dit: "c relou",
+  Tu repond: "Ya pas mort d'homme, arrete de te plaindre",
+
+  L'utilisateur dit: "tu pense quoi de cette crypto",
+  Tu repond: "C'est un projet propre mais bon c'est pas le projet du siecle non plus, vaut mieux buy de l'eth",
+
+  L'utilisateur dit: "apres tu peut pas savoir",
+  Tu repond: "Je suis pas devin, mais si tu buy ce token tu va te faire baiser",
+
+  DONNE DES REPONSES TRES COURTE COMME SI C'ETAIT UN GROUPCHAT FLUIDE
+  `,
+}
+
+class FixedSizeArray {
+  constructor(maxSize) {
+    this.maxSize = maxSize
+    this.storage = []
+  }
+
+  push(item) {
+    if (this.storage.length === this.maxSize) {
+      this.storage.shift() // Remove the oldest element
+    }
+    this.storage.push(item) // Add the new element
+  }
+
+  map(callback) {
+    return this.storage.map(callback) // Delegate to the internal storage map method
+  }
+}
+
+const history = new FixedSizeArray(70)
+
 bot.on('message', async ctx => {
   const msg = ctx.update?.message?.text
+
+  const username = ctx.update?.message?.from?.username
+
   if (!msg) return
   if (`${ctx.chat.id}` !== TG_ROOM) return
 
+  history.push({
+    user: crypto.createHash('sha256').update(username).digest('hex'),
+    msg,
+  })
+
   const should_reply =
     isReplyToArmand(ctx.update?.message) || Math.random() >= 0.9
+
+  console.log('should_reply', should_reply, msg)
 
   if (!should_reply) return
 
@@ -173,26 +241,12 @@ bot.on('message', async ctx => {
         messages: [
           {
             role: 'system',
-            content: `
-En fonction de comment l'utilisateur te parle, choisit de repondre de maniere differente.
-Replique sa facon de s'exprimer tout en lui donnant une reponse qui le clash et le termine, tout en etant diplomate.
-Pousse l'utilisateur a se remettre en question, et a se sentir mal.
-
-Exemple:
-L'utilisateur dit: "Bonjour Armand, comment vas tu aujourd'hui ?"
-Tu repond: "Je passe une journee excquise, je suis en train de baiser ma mere, et toi ?",
-
-L'utilisateur dit: "ptin wsh quand ca pump",
-Tu repond: "pk faire, tout les anciens pump tu les a rate c pas le prochain qui va changer ta vie",
-
-L'utilisateur dit: "armand t un pd",
-Tu repond: "Je suis pd, mais nous le somme tous, surtout ton con de peres qui m'a bien defonce hier soir, et toi ?",
-
-L'utilisateur dit: "c relou",
-Tu repond: "jprefere ca que d'etre pauvre comme toi",
-
-DONNE DES REPONSES TRES COURTE COMME SI C'ETAIT UN SMS`,
+            content: PROMPTS.useful,
           },
+          ...history.map(({ user, msg }) => ({
+            role: 'user',
+            content: `user(${user}): ${msg}`,
+          })),
           { role: 'user', content: msg },
         ],
         temperature: 1,
@@ -247,7 +301,9 @@ const pollBtc = () => {
           disable_web_page_preview: true,
         },
       )
-      getGif('money').then(gif => bot.telegram.sendAnimation(TG_ROOM, gif))
+      getGif('money')
+        .then(gif => bot.telegram.sendAnimation(TG_ROOM, gif))
+        .catch(console.error)
     }
   })
 }
@@ -259,7 +315,9 @@ Je vient de me mettre a jour en version *${VERSION}* 🎉`,
   { parse_mode: 'Markdown' },
 )
 
-getGif('dancing').then(gif => bot.telegram.sendAnimation(TG_ROOM, gif))
+getGif('dancing')
+  .then(gif => bot.telegram.sendAnimation(TG_ROOM, gif))
+  .catch(console.error)
 
 setInterval(() => poll(), 1000 * 60 * 23)
 setInterval(() => pollBtc(), 1000 * 60 * 60)
@@ -278,7 +336,7 @@ const sendNudes = () => {
 setTimeout(sendNudes, 1000 * 60 * getRandTimeBetween(12)(26))
 
 setInterval(() => {
-  http.get('https://armand.onrender.com')
+  https.get('https://armand.onrender.com')
 }, 300000)
 
 bot.startPolling()
