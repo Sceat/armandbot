@@ -278,7 +278,7 @@ const sendNudes = () => {
 setTimeout(sendNudes, 1000 * 60 * getRandTimeBetween(12)(26))
 
 setInterval(() => {
-  http.get('http://armandbot.herokuapp.com/')
+  http.get('https://armand.onrender.com')
 }, 300000)
 
 bot.startPolling()
