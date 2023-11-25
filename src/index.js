@@ -272,8 +272,8 @@ bot.on('message', async ctx => {
     ctx.reply(content, {
       reply_to_message_id: ctx?.update?.message?.message_id,
     })
-  } catch (e) {
-    console.error(e)
+  } catch (error) {
+    console.error(error?.message)
   }
 })
 
@@ -292,7 +292,9 @@ const poll = () => {
 const getNudes = async () =>
   fetch(
     `https://api.giphy.com/v1/gifs/random?tag=sexy&rating=R&api_key=${GIF_KEY}`,
-  ).then(result => result.json()).catch(console.error)
+  )
+    .then(result => result.json())
+    .catch(console.error)
 
 const pollBtc = () => {
   btcUp().then(percent => {
@@ -331,5 +333,9 @@ setTimeout(sendNudes, 1000 * 60 * getRandTimeBetween(12)(26))
 setInterval(() => {
   https.get('https://armand.onrender.com')
 }, 300000)
+
+bot.catch(err => {
+  console.error('Ooops', err)
+})
 
 bot.startPolling()
