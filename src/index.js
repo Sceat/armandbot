@@ -216,12 +216,16 @@ bot.on('message', async ctx => {
   const msg = ctx.update?.message?.text
 
   const username = ctx.update?.message?.from?.username
+  const reply_to_message_id = ctx?.update?.message?.message_id
 
-  if (!msg) return
+  if (!msg || !username || !reply_to_message_id) return
   if (`${ctx.chat.id}` !== TG_ROOM) return
 
   history.push({
-    user: crypto.createHash('sha256').update(username).digest('hex'),
+    user: crypto
+      .createHash('sha256')
+      .update(username ?? 'anon')
+      .digest('hex'),
     msg,
   })
 
