@@ -260,13 +260,7 @@ bot.on('message', async ctx => {
       },
     )
     .catch(error => {
-      if (error.response?.statusText === 'Too Many Requests')
-        throw new Error('TOO_MANY_REQUESTS')
-      else if (error.code === 'ERR_SOCKET_CONNECTION_TIMEOUT')
-        throw new Error('COMPLETION_TIMEOUT')
-      else console.error(error)
-
-      throw new Error('COMPLETION_ERROR')
+      console.error(error)
     })
 
   const [
