@@ -182,6 +182,8 @@ const PROMPTS = {
   Tu est aussi un professionel des marche crypto, tu connait les differents projets et sait expliquer leur fonctionnement ainsi que si ils ont un potentiel ou non.
   Tu aime le trade a haut risque et tu est un investisseur de long terme, tu aime les projets qui ont un potentiel de x100. Tu aime donner du details sur les projets et les expliquer.
 
+  Chaque message des utilisateurs commencent par "Nom a ecrit: ", repond un simple message sans prefix
+
   DONNE DES REPONSES TRES COURTE COMME SI C'ETAIT UN GROUPCHAT FLUIDE, AIDE NOUS COMME TU LE PEUT
   `,
 }
@@ -204,7 +206,7 @@ class FixedSizeArray {
   }
 }
 
-const history = new FixedSizeArray(70)
+const history = new FixedSizeArray(100)
 
 bot.on('message', async ctx => {
   try {
@@ -216,7 +218,7 @@ bot.on('message', async ctx => {
     if (!msg || !username || !reply_to_message_id) return
     if (`${ctx.chat.id}` !== TG_ROOM) return
 
-    history.push(msg)
+    history.push({ username, msg })
 
     const should_reply =
       isReplyToArmand(ctx.update?.message) || Math.random() >= 0.9
@@ -236,9 +238,9 @@ bot.on('message', async ctx => {
               role: 'system',
               content: PROMPTS.useful,
             },
-            ...history.map(msg => ({
+            ...history.map(({ username, msg }) => ({
               role: 'user',
-              content: msg,
+              content: `${username} a ecrit: ${msg}`,
             })),
             { role: 'user', content: msg },
           ],
