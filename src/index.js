@@ -306,17 +306,6 @@ const pollBtc = () => {
   })
 }
 
-bot.telegram.sendMessage(
-  TG_ROOM,
-  `Oh Oh Oh ! *Je suis armand* le bot qui parle chinois.
-Je vient de me mettre a jour en version *${VERSION}* 🎉`,
-  { parse_mode: 'Markdown' },
-)
-
-getGif('dancing')
-  .then(gif => bot.telegram.sendAnimation(TG_ROOM, gif))
-  .catch(console.error)
-
 // setInterval(() => poll(), 1000 * 60 * 23)
 // setInterval(() => pollBtc(), 1000 * 60 * 60)
 
