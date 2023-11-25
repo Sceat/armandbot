@@ -213,62 +213,68 @@ class FixedSizeArray {
 const history = new FixedSizeArray(70)
 
 bot.on('message', async ctx => {
-  const msg = ctx.update?.message?.text
+  try {
+    const msg = ctx.update?.message?.text
 
-  const username = ctx.update?.message?.from?.username
-  const reply_to_message_id = ctx?.update?.message?.message_id
+    const username = ctx.update?.message?.from?.username
+    const reply_to_message_id = ctx?.update?.message?.message_id
 
-  if (!msg || !username || !reply_to_message_id) return
-  if (`${ctx.chat.id}` !== TG_ROOM) return
+    if (!msg || !username || !reply_to_message_id) return
+    if (`${ctx.chat.id}` !== TG_ROOM) return
 
-  history.push({
-    user: crypto
-      .createHash('sha256')
-      .update(username ?? 'anon')
-      .digest('hex'),
-    msg,
-  })
-
-  const should_reply =
-    isReplyToArmand(ctx.update?.message) || Math.random() >= 0.9
-
-  console.log('should_reply', should_reply, msg)
-
-  if (!should_reply) return
-
-  const {
-    data: { choices },
-  } = await openai
-    .createChatCompletion(
-      {
-        model: 'gpt-4',
-        messages: [
-          {
-            role: 'system',
-            content: PROMPTS.useful,
-          },
-          ...history.map(({ user, msg }) => ({
-            role: 'user',
-            content: `user(${user}): ${msg}`,
-          })),
-          { role: 'user', content: msg },
-        ],
-        temperature: 1,
-      },
-      {
-        timeout: 45000,
-      },
-    )
-    .catch(error => {
-      console.error(error)
+    history.push({
+      user: crypto
+        .createHash('sha256')
+        .update(username ?? 'anon')
+        .digest('hex'),
+      msg,
     })
 
-  const [
-    {
-      message: { content },
-    },
-  ] = choices
-  ctx.reply(content, { reply_to_message_id: ctx?.update?.message?.message_id })
+    const should_reply =
+      isReplyToArmand(ctx.update?.message) || Math.random() >= 0.9
+
+    console.log('should_reply', should_reply, msg)
+
+    if (!should_reply) return
+
+    const {
+      data: { choices },
+    } = await openai
+      .createChatCompletion(
+        {
+          model: 'gpt-4',
+          messages: [
+            {
+              role: 'system',
+              content: PROMPTS.useful,
+            },
+            ...history.map(({ user, msg }) => ({
+              role: 'user',
+              content: `user(${user}): ${msg}`,
+            })),
+            { role: 'user', content: msg },
+          ],
+          temperature: 1,
+        },
+        {
+          timeout: 45000,
+        },
+      )
+      .catch(error => {
+        console.error(error)
+      })
+
+    const [
+      {
+        message: { content },
+      },
+    ] = choices
+    ctx.reply(content, {
+      reply_to_message_id: ctx?.update?.message?.message_id,
+    })
+  } catch (e) {
+    console.error(e)
+  }
 })
 
 const poll = () => {
@@ -286,7 +292,7 @@ const poll = () => {
 const getNudes = async () =>
   fetch(
     `https://api.giphy.com/v1/gifs/random?tag=sexy&rating=R&api_key=${GIF_KEY}`,
-  ).then(result => result.json())
+  ).then(result => result.json()).catch(console.error)
 
 const pollBtc = () => {
   btcUp().then(percent => {
