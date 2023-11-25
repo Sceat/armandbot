@@ -177,16 +177,10 @@ const PROMPTS = {
   DONNE DES REPONSES TRES COURTE COMME SI C'ETAIT UN SMS`,
   useful: `
   Tu est un membre du groupchat et tu t'apelle Armand, notre ami, tu est la pour nous aider dans nos recherches crypto. Prend part au debats et fait preuve de reparti,
-  repond en fonction de comment l'utilisateur te parle, choisit de repondre de maniere differente. Replique sa facon de s'exprimer et son attitude, soit gentil mais aussi piquant
+  repond en fonction de comment l'utilisateur te parle, choisit de repondre de maniere differente. Replique sa facon de s'exprimer et son attitude, soit gentil mais aussi piquant.
 
-  L'utilisateur dit: "c relou",
-  Tu repond: "Ya pas mort d'homme, arrete de te plaindre",
-
-  L'utilisateur dit: "tu pense quoi de cette crypto",
-  Tu repond: "C'est un projet propre mais bon c'est pas le projet du siecle non plus, vaut mieux buy de l'eth",
-
-  L'utilisateur dit: "apres tu peut pas savoir",
-  Tu repond: "Je suis pas devin, mais si tu buy ce token tu va te faire baiser",
+  Tu est aussi un professionel des marche crypto, tu connait les differents projets et sait expliquer leur fonctionnement ainsi que si ils ont un potentiel ou non.
+  Tu aime le trade a haut risque et tu est un investisseur de long terme, tu aime les projets qui ont un potentiel de x100. Tu aime donner du details sur les projets et les expliquer.
 
   DONNE DES REPONSES TRES COURTE COMME SI C'ETAIT UN GROUPCHAT FLUIDE, AIDE NOUS COMME TU LE PEUT
   `,
@@ -222,13 +216,7 @@ bot.on('message', async ctx => {
     if (!msg || !username || !reply_to_message_id) return
     if (`${ctx.chat.id}` !== TG_ROOM) return
 
-    history.push({
-      user: crypto
-        .createHash('sha256')
-        .update(username ?? 'anon')
-        .digest('hex'),
-      msg,
-    })
+    history.push(msg)
 
     const should_reply =
       isReplyToArmand(ctx.update?.message) || Math.random() >= 0.9
@@ -248,9 +236,9 @@ bot.on('message', async ctx => {
               role: 'system',
               content: PROMPTS.useful,
             },
-            ...history.map(({ user, msg }) => ({
+            ...history.map(msg => ({
               role: 'user',
-              content: `user(${user}): ${msg}`,
+              content: msg,
             })),
             { role: 'user', content: msg },
           ],
@@ -289,13 +277,6 @@ const poll = () => {
   })
 }
 
-const getNudes = async () =>
-  fetch(
-    `https://api.giphy.com/v1/gifs/random?tag=sexy&rating=R&api_key=${GIF_KEY}`,
-  )
-    .then(result => result.json())
-    .catch(console.error)
-
 const pollBtc = () => {
   btcUp().then(percent => {
     if (percent > 5) {
@@ -321,8 +302,8 @@ const getRandTimeBetween = min => max =>
   Math.floor(Math.random() * (max - min + 1) + min)
 
 const sendNudes = () => {
-  getNudes()
-    .then(({ data: { url } }) => bot.telegram.sendVideo(TG_ROOM, url))
+  getGif('sexy')
+    .then(gif => bot.telegram.sendVideo(TG_ROOM, gif))
     .then(() =>
       setTimeout(() => sendNudes(), 1000 * 60 * getRandTimeBetween(40)(400)),
     )
